@@ -14,7 +14,7 @@ Consegna istantanea garantita in **meno di 5 secondi** dal pagamento.
 |-------|-----------|
 | Frontend | React 18, Inertia.js, TailwindCSS |
 | Backend | Laravel 11, PHP 8.3 |
-| Database | SQLite (predefinito) o MariaDB/MySQL |
+| Database | **MariaDB 12** (configurazione predefinita) |
 | Auth | Laravel Breeze (email/password), middleware admin |
 | Pagamenti | Stripe + PayPal (placeholder UI) + modalità Demo |
 | Build tool | Vite 6 |
@@ -71,6 +71,7 @@ Migrations in `database/migrations/`, seeder in `database/seeders/`.
 - **PHP 8.3** (installato via winget: `winget install PHP.PHP.8.3`)
 - **Composer 2.x** (installato in `%LOCALAPPDATA%\Composer`)
 - **Node.js 20+** e npm
+- **MariaDB 12** (installato via winget: `winget install MariaDB.Server`)
 
 ### 1. Installazione dipendenze
 
@@ -79,17 +80,31 @@ composer install
 npm install
 ```
 
-### 2. Configurazione
+### 2. Configurazione database MariaDB
 
-Il file `.env` è già preconfigurato per SQLite. Per usare MariaDB:
+Avvia il client MariaDB e crea il database:
+
+```sql
+CREATE DATABASE IF NOT EXISTS instantkey
+    CHARACTER SET utf8mb4
+    COLLATE utf8mb4_unicode_ci;
+```
+
+Copia `.env.example` in `.env` e imposta le credenziali del DB:
 
 ```env
-DB_CONNECTION=mysql
+DB_CONNECTION=mariadb
 DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_DATABASE=instantkey
 DB_USERNAME=root
-DB_PASSWORD=
+DB_PASSWORD=instantkey   # la password scelta in fase di installazione
+```
+
+Genera la chiave dell'app:
+
+```bash
+php artisan key:generate
 ```
 
 ### 3. Database (migrazioni + dati demo)

@@ -48,7 +48,7 @@
     }
 
     .badge-platform {
-        @apply badge bg-slate-800 text-slate-200 border border-slate-700;
+        @apply badge bg-slate-950/80 text-slate-200 border border-slate-700 backdrop-blur-sm shadow-sm;
     }
 
     .badge-discount {

@@ -1,0 +1,26 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\Genre;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
+
+class GenreSeeder extends Seeder
+{
+    public function run(): void
+    {
+        $genres = [
+            'Action', 'Adventure', 'RPG', 'FPS', 'Strategy',
+            'Simulation', 'Sports', 'Racing', 'Horror', 'Indie',
+            'MMO', 'Open World', 'Survival', 'Puzzle',
+        ];
+
+        foreach ($genres as $name) {
+            Genre::updateOrCreate(
+                ['slug' => Str::slug($name)],
+                ['name' => $name, 'slug' => Str::slug($name)]
+            );
+        }
+    }
+}

@@ -20,11 +20,12 @@ Route::get('/catalogo', [CatalogController::class, 'index'])->name('catalog.inde
 Route::get('/giochi/{slug}', [ProductController::class, 'show'])->name('products.show');
 
 Route::get('/carrello', [CartController::class, 'index'])->name('cart.index');
+Route::post('/carrello/sconto', [CartController::class, 'applyDiscount'])->name('cart.discount.apply');
+Route::delete('/carrello/sconto', [CartController::class, 'removeDiscount'])->name('cart.discount.remove');
+
 Route::post('/carrello/{product}', [CartController::class, 'add'])->name('cart.add');
 Route::patch('/carrello/{product}', [CartController::class, 'update'])->name('cart.update');
 Route::delete('/carrello/{product}', [CartController::class, 'remove'])->name('cart.remove');
-Route::post('/carrello/sconto', [CartController::class, 'applyDiscount'])->name('cart.discount.apply');
-Route::delete('/carrello/sconto', [CartController::class, 'removeDiscount'])->name('cart.discount.remove');
 
 Route::get('/contatti', fn () => Inertia::render('Contact'))->name('contact');
 Route::get('/faq', fn () => Inertia::render('Faq'))->name('faq');

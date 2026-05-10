@@ -20,7 +20,16 @@ export default function AdminDashboard({ stats, latestOrders, lowStock }) {
                     <h1 className="text-4xl font-extrabold">Admin Dashboard</h1>
                     <span className="badge-info">Pannello di controllo</span>
                 </div>
-                <p className="text-slate-400 mb-8">Vista d'insieme della piattaforma</p>
+                <p className="text-slate-400 mb-6">Vista d'insieme della piattaforma</p>
+
+                <div className="flex gap-3 mb-8">
+                    <Link href={route('admin.products.index')} className="btn-primary">
+                        Gestione Prodotti & Chiavi
+                    </Link>
+                    <Link href={route('admin.tickets.index')} className="btn-ghost border border-slate-700 hover:border-slate-500">
+                        Gestione Ticket
+                    </Link>
+                </div>
 
                 <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
                     {cards.map((c) => (

@@ -1,5 +1,14 @@
 import { Link, usePage, router } from '@inertiajs/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import FluidGlass from '@/Components/react-bits/FluidGlass';
+import FlowingMenu from '@/Components/react-bits/FlowingMenu';
+import StarBorder from '@/Components/react-bits/StarBorder';
+
+const MENU_IMG =
+    'data:image/svg+xml,' +
+    encodeURIComponent(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="80"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="%233b9bff"/><stop offset="1" stop-color="%238b5cf6"/></linearGradient></defs><rect fill="url(%23g)" width="200" height="80" rx="12"/></svg>',
+    );
 
 export default function SiteLayout({ children }) {
     const { auth, cart, flash, app_name } = usePage().props;
@@ -20,131 +29,158 @@ export default function SiteLayout({ children }) {
         router.get(route('catalog.index'), { q: search }, { preserveState: true });
     };
 
+    const flowingItems = useMemo(() => {
+        const items = [{ link: route('catalog.index'), text: 'Catalogo', image: MENU_IMG }];
+        if (auth?.user) {
+            items.push(
+                { link: route('wishlist.index'), text: 'Wishlist', image: MENU_IMG },
+                { link: route('orders.index'), text: 'Ordini', image: MENU_IMG },
+                { link: route('tickets.index'), text: 'Supporto', image: MENU_IMG },
+                { link: route('profile.edit'), text: 'Profilo', image: MENU_IMG },
+            );
+            if (auth.user.is_admin) {
+                items.push({ link: route('admin.dashboard'), text: 'Admin', image: MENU_IMG });
+            }
+            items.push({ link: route('logout'), text: 'Esci', method: 'post', image: MENU_IMG });
+        } else {
+            items.push(
+                { link: route('login'), text: 'Accedi', image: MENU_IMG },
+                { link: route('register'), text: 'Registrati', image: MENU_IMG },
+            );
+        }
+        return items;
+    }, [auth?.user]);
+
     return (
         <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100">
-            <header className="sticky top-0 z-50 border-b border-slate-800 bg-slate-950/85 backdrop-blur-lg">
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div className="flex h-16 items-center justify-between gap-4">
-                        <Link href={route('home')} className="flex items-center gap-2 shrink-0">
-                            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-accent-500 shadow-lg shadow-brand-500/40">
-                                <svg viewBox="0 0 24 24" className="h-5 w-5 text-white" fill="currentColor">
-                                    <path d="M21 10h-8.35A5.99 5.99 0 0 0 7 6a6 6 0 0 0 0 12 5.99 5.99 0 0 0 5.65-4H13l2 2 2-2 2 2 4-4-2-2zM7 15a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <div className="text-lg font-extrabold tracking-tight leading-none">
-                                    INSTANT <span className="bg-gradient-to-r from-brand-400 to-accent-400 bg-clip-text text-transparent">KEY</span>
+            <header className="sticky top-0 z-50">
+                <FluidGlass>
+                    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                        <div className="flex h-16 items-center justify-between gap-4">
+                            <Link href={route('home')} className="flex items-center gap-2 shrink-0">
+                                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-accent-500 shadow-lg shadow-brand-500/40">
+                                    <svg viewBox="0 0 24 24" className="h-5 w-5 text-white" fill="currentColor">
+                                        <path d="M21 10h-8.35A5.99 5.99 0 0 0 7 6a6 6 0 0 0 0 12 5.99 5.99 0 0 0 5.65-4H13l2 2 2-2 2 2 4-4-2-2zM7 15a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                                    </svg>
                                 </div>
-                                <div className="text-[10px] uppercase tracking-widest text-slate-500 leading-none mt-0.5">Digital Game Marketplace</div>
-                            </div>
-                        </Link>
-
-                        <form onSubmit={submitSearch} className="hidden md:flex flex-1 max-w-xl">
-                            <div className="relative w-full">
-                                <input
-                                    type="text"
-                                    value={search}
-                                    onChange={(e) => setSearch(e.target.value)}
-                                    placeholder="Cerca tra migliaia di giochi..."
-                                    className="input-field pl-11"
-                                />
-                                <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-4.3-4.3M17 11a6 6 0 1 1-12 0 6 6 0 0 1 12 0Z"/>
-                                </svg>
-                            </div>
-                        </form>
-
-                        <nav className="hidden lg:flex items-center gap-1">
-                            <Link href={route('catalog.index')} className="btn-ghost">Catalogo</Link>
-                            {auth?.user && (
-                                <Link href={route('wishlist.index')} className="btn-ghost">Wishlist</Link>
-                            )}
-                            {auth?.user && (
-                                <Link href={route('orders.index')} className="btn-ghost">Ordini</Link>
-                            )}
-                        </nav>
-
-                        <div className="flex items-center gap-2">
-                            <Link href={route('cart.index')} className="relative btn-ghost p-2">
-                                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.5l2.7 13.5h12.6l1.95-9H6.6M9 21a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm10.5 0a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"/>
-                                </svg>
-                                {cart?.count > 0 && (
-                                    <span className="absolute -top-1 -right-1 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-gradient-to-r from-brand-500 to-accent-500 px-1 text-xs font-bold text-white">
-                                        {cart.count}
-                                    </span>
-                                )}
+                                <div>
+                                    <div className="text-lg font-extrabold tracking-tight leading-none">
+                                        INSTANT <span className="bg-gradient-to-r from-brand-400 to-accent-400 bg-clip-text text-transparent">KEY</span>
+                                    </div>
+                                    <div className="text-[10px] uppercase tracking-widest text-slate-500 leading-none mt-0.5">Digital Game Marketplace</div>
+                                </div>
                             </Link>
 
-                            {auth?.user ? (
-                                <div className="hidden md:flex items-center gap-2">
-                                    {auth.user.is_admin && (
-                                        <Link href={route('admin.dashboard')} className="badge-info">Admin</Link>
-                                    )}
-                                    <Link href={route('profile.edit')} className="btn-ghost">
-                                        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-brand-500 to-accent-500 text-sm font-bold">
-                                            {auth.user.name.charAt(0).toUpperCase()}
-                                        </span>
-                                    </Link>
-                                    <Link href={route('logout')} method="post" as="button" className="btn-ghost">Esci</Link>
+                            <form onSubmit={submitSearch} className="hidden md:flex flex-1 max-w-xl">
+                                <div className="relative w-full">
+                                    <input
+                                        type="text"
+                                        value={search}
+                                        onChange={(e) => setSearch(e.target.value)}
+                                        placeholder="Cerca tra migliaia di giochi..."
+                                        className="input-field border-cyan-500/20 bg-slate-950/60 pl-11"
+                                    />
+                                    <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-4.3-4.3M17 11a6 6 0 1 1-12 0 6 6 0 0 1 12 0Z"/>
+                                    </svg>
                                 </div>
-                            ) : (
-                                <div className="hidden md:flex items-center gap-2">
-                                    <Link href={route('login')} className="btn-ghost">Accedi</Link>
-                                    <Link href={route('register')} className="btn-primary text-sm">Registrati</Link>
-                                </div>
-                            )}
-
-                            <button
-                                onClick={() => setMobileMenu(!mobileMenu)}
-                                className="lg:hidden btn-ghost p-2"
-                                aria-label="Menu"
-                            >
-                                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-
-                    {mobileMenu && (
-                        <div className="lg:hidden pb-4 space-y-2 border-t border-slate-800 pt-4 animate-fade-in">
-                            <form onSubmit={submitSearch} className="md:hidden mb-3">
-                                <input
-                                    type="text"
-                                    value={search}
-                                    onChange={(e) => setSearch(e.target.value)}
-                                    placeholder="Cerca giochi..."
-                                    className="input-field"
-                                />
                             </form>
-                            <Link href={route('catalog.index')} className="block btn-ghost w-full text-left">Catalogo</Link>
-                            {auth?.user ? (
-                                <>
-                                    <Link href={route('wishlist.index')} className="block btn-ghost w-full text-left">Wishlist</Link>
-                                    <Link href={route('orders.index')} className="block btn-ghost w-full text-left">I miei ordini</Link>
-                                    <Link href={route('tickets.index')} className="block btn-ghost w-full text-left">Supporto</Link>
-                                    <Link href={route('profile.edit')} className="block btn-ghost w-full text-left">Profilo</Link>
-                                    {auth.user.is_admin && (
-                                        <Link href={route('admin.dashboard')} className="block btn-ghost w-full text-left">Admin</Link>
+
+                            <nav className="hidden lg:flex items-center gap-1">
+                                <Link href={route('catalog.index')} className="btn-ghost">Catalogo</Link>
+                                {auth?.user && (
+                                    <Link href={route('wishlist.index')} className="btn-ghost">Wishlist</Link>
+                                )}
+                                {auth?.user && (
+                                    <Link href={route('orders.index')} className="btn-ghost">Ordini</Link>
+                                )}
+                            </nav>
+
+                            <div className="flex items-center gap-2">
+                                <Link href={route('cart.index')} className="relative btn-ghost p-2">
+                                    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.5l2.7 13.5h12.6l1.95-9H6.6M9 21a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm10.5 0a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"/>
+                                    </svg>
+                                    {cart?.count > 0 && (
+                                        <span className="absolute -top-1 -right-1 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-gradient-to-r from-brand-500 to-accent-500 px-1 text-xs font-bold text-white">
+                                            {cart.count}
+                                        </span>
                                     )}
-                                    <Link href={route('logout')} method="post" as="button" className="block btn-ghost w-full text-left">Esci</Link>
-                                </>
-                            ) : (
-                                <>
-                                    <Link href={route('login')} className="block btn-ghost w-full text-left">Accedi</Link>
-                                    <Link href={route('register')} className="block btn-primary w-full">Registrati</Link>
-                                </>
-                            )}
+                                </Link>
+
+                                {auth?.user ? (
+                                    <div className="hidden md:flex items-center gap-2">
+                                        {auth.user.is_admin && (
+                                            <Link href={route('admin.dashboard')} className="badge-info">Admin</Link>
+                                        )}
+                                        <Link href={route('profile.edit')} className="btn-ghost">
+                                            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-brand-500 to-accent-500 text-sm font-bold">
+                                                {auth.user.name.charAt(0).toUpperCase()}
+                                            </span>
+                                        </Link>
+                                        <Link href={route('logout')} method="post" as="button" className="btn-ghost">Esci</Link>
+                                    </div>
+                                ) : (
+                                    <div className="hidden md:flex items-center gap-2">
+                                        <Link href={route('login')} className="btn-ghost">Accedi</Link>
+                                        <Link href={route('register')} className="btn-primary text-sm">Registrati</Link>
+                                    </div>
+                                )}
+
+                                <button
+                                    type="button"
+                                    onClick={() => setMobileMenu(!mobileMenu)}
+                                    className="lg:hidden btn-ghost p-2"
+                                    aria-label="Menu"
+                                >
+                                    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
-                    )}
-                </div>
+
+                        {mobileMenu && (
+                            <div className="lg:hidden space-y-4 border-t border-cyan-500/15 pb-4 pt-4 animate-fade-in">
+                                <form onSubmit={submitSearch} className="md:hidden">
+                                    <input
+                                        type="text"
+                                        value={search}
+                                        onChange={(e) => setSearch(e.target.value)}
+                                        placeholder="Cerca giochi..."
+                                        className="input-field border-cyan-500/20 bg-slate-950/60"
+                                    />
+                                </form>
+                                <div className="h-[min(22rem,70vh)] min-h-[14rem] overflow-hidden rounded-xl border border-cyan-500/20">
+                                    <FlowingMenu
+                                        items={flowingItems}
+                                        speed={12}
+                                        textColor="#e2e8f0"
+                                        bgColor="rgba(15,23,42,0.96)"
+                                        marqueeBgColor="#22d3ee"
+                                        marqueeTextColor="#0f172a"
+                                    />
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </FluidGlass>
             </header>
 
             {showFlash && (flash?.success || flash?.error) && (
-                <div className="fixed top-20 right-4 z-[60] animate-fade-in max-w-sm">
-                    <div className={`rounded-lg border p-4 shadow-2xl ${flash.success ? 'bg-emerald-500/10 border-emerald-500/40 text-emerald-300' : 'bg-rose-500/10 border-rose-500/40 text-rose-300'}`}>
-                        <div className="flex items-start gap-3">
+                <div className="fixed top-24 right-4 z-[60] max-w-sm animate-fade-in">
+                    <StarBorder
+                        as="div"
+                        color={flash.success ? '#34d399' : '#fb7185'}
+                        speed="5s"
+                        thickness={2}
+                        innerClassName={
+                            flash.success
+                                ? 'border border-emerald-500/40 bg-emerald-500/10 text-left text-emerald-100'
+                                : 'border border-rose-500/40 bg-rose-500/10 text-left text-rose-100'
+                        }
+                    >
+                        <div className="flex items-start gap-3 text-left">
                             <svg className="h-5 w-5 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                                 {flash.success ? (
                                     <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5"/>
@@ -154,7 +190,7 @@ export default function SiteLayout({ children }) {
                             </svg>
                             <p className="text-sm font-medium">{flash.success || flash.error}</p>
                         </div>
-                    </div>
+                    </StarBorder>
                 </div>
             )}
 

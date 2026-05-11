@@ -2,6 +2,7 @@ import { Head, Link, router } from '@inertiajs/react';
 import { useState } from 'react';
 import SiteLayout from '@/Layouts/SiteLayout';
 import GameCard from '@/Components/GameCard';
+import AnimatedList, { AnimatedGridItem } from '@/Components/react-bits/AnimatedList';
 
 export default function CatalogIndex({ products, platforms, genres, filters }) {
     const [localFilters, setLocalFilters] = useState({
@@ -164,11 +165,13 @@ export default function CatalogIndex({ products, platforms, genres, filters }) {
                             </div>
                         ) : (
                             <>
-                                <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-5">
-                                    {products.data.map((p) => (
-                                        <GameCard key={p.id} product={p} />
+                                <AnimatedList className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-5">
+                                    {products.data.map((p, i) => (
+                                        <AnimatedGridItem key={p.id} index={i} className="min-h-0">
+                                            <GameCard product={p} />
+                                        </AnimatedGridItem>
                                     ))}
-                                </div>
+                                </AnimatedList>
 
                                 {products.last_page > 1 && (
                                     <div className="mt-10 flex items-center justify-center gap-2 flex-wrap">

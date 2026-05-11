@@ -2,6 +2,8 @@ import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import SiteLayout from '@/Layouts/SiteLayout';
 import GameCard from '@/Components/GameCard';
+import Iridescence from '@/Components/react-bits/Iridescence';
+import Magnet from '@/Components/react-bits/Magnet';
 
 export default function ProductsShow({ product, related, available_keys, is_in_wishlist, can_review, has_reviewed }) {
     const { auth } = usePage().props;
@@ -69,12 +71,23 @@ export default function ProductsShow({ product, related, available_keys, is_in_w
 
                     <div className="grid lg:grid-cols-[400px_1fr] gap-8 lg:gap-12">
                         <div>
-                            <div className="aspect-[3/4] rounded-2xl overflow-hidden border border-slate-800 shadow-2xl">
-                                {product.image_url ? (
-                                    <img src={product.image_url} alt={product.title} className="w-full h-full object-cover" />
-                                ) : (
-                                    <div className="w-full h-full bg-slate-800" />
-                                )}
+                            <div className="relative aspect-[3/4] overflow-hidden rounded-2xl border border-slate-800 shadow-2xl">
+                                <div className="pointer-events-none absolute inset-0 z-0 opacity-[0.55]">
+                                    <Iridescence
+                                        color={[0.25, 0.45, 0.95]}
+                                        speed={1.1}
+                                        amplitude={0.14}
+                                        mouseReact
+                                        className="h-full min-h-full"
+                                    />
+                                </div>
+                                <div className="relative z-[1] h-full w-full bg-slate-950/20">
+                                    {product.image_url ? (
+                                        <img src={product.image_url} alt={product.title} className="h-full w-full object-cover" />
+                                    ) : (
+                                        <div className="h-full w-full bg-slate-800" />
+                                    )}
+                                </div>
                             </div>
                         </div>
 
@@ -146,28 +159,34 @@ export default function ProductsShow({ product, related, available_keys, is_in_w
                                 </div>
 
                                 {available_keys > 0 && (
-                                    <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                                    <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-stretch">
                                         <div className="flex items-center rounded-lg border border-slate-700 bg-slate-900">
                                             <button
+                                                type="button"
                                                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
                                                 className="px-3 py-2 text-slate-400 hover:text-white"
                                             >−</button>
                                             <span className="px-4 font-semibold">{quantity}</span>
                                             <button
+                                                type="button"
                                                 onClick={() => setQuantity(Math.min(available_keys, quantity + 1))}
                                                 className="px-3 py-2 text-slate-400 hover:text-white"
                                             >+</button>
                                         </div>
-                                        <button onClick={addToCart} className="btn-secondary flex-1">
-                                            Aggiungi al carrello
-                                        </button>
-                                        <button onClick={buyNow} className="btn-primary flex-1">
-                                            Compra subito
-                                        </button>
+                                        <Magnet wrapperClassName="w-full sm:flex-1" innerClassName="w-full">
+                                            <button type="button" onClick={addToCart} className="btn-secondary w-full">
+                                                Aggiungi al carrello
+                                            </button>
+                                        </Magnet>
+                                        <Magnet wrapperClassName="w-full sm:flex-1" innerClassName="w-full">
+                                            <button type="button" onClick={buyNow} className="btn-primary w-full">
+                                                Compra subito
+                                            </button>
+                                        </Magnet>
                                     </div>
                                 )}
 
-                                <button onClick={toggleWishlist} className="mt-3 btn-ghost w-full">
+                                <button type="button" onClick={toggleWishlist} className="mt-3 btn-ghost w-full">
                                     <svg className={`h-5 w-5 ${is_in_wishlist ? 'text-rose-500 fill-current' : ''}`} fill={is_in_wishlist ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"/>
                                     </svg>
@@ -213,7 +232,7 @@ export default function ProductsShow({ product, related, available_keys, is_in_w
                     <div className="flex items-center justify-between mb-6">
                         <h2 className="text-2xl font-bold">Recensioni dei giocatori</h2>
                         {auth?.user && can_review && !has_reviewed && (
-                            <button onClick={() => setShowReview(!showReview)} className="btn-primary text-sm">
+                            <button type="button" onClick={() => setShowReview(!showReview)} className="btn-primary text-sm">
                                 Scrivi recensione
                             </button>
                         )}
@@ -266,7 +285,7 @@ export default function ProductsShow({ product, related, available_keys, is_in_w
                                             <div className="flex mt-1">
                                                 {[1, 2, 3, 4, 5].map((s) => (
                                                     <svg key={s} className={`h-4 w-4 ${s <= r.rating ? 'text-amber-400' : 'text-slate-700'}`} fill="currentColor" viewBox="0 0 20 20">
-                                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 0 0 .95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.367 2.446a1 1 0 0 0-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.54 1.118l-3.366-2.446a1 1 0 0 0-1.176 0l-3.366 2.446c-.784.57-1.838-.197-1.539-1.118l1.286-3.957a1 1 0 0 0-.364-1.118L2.05 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 0 0 .95-.69l1.286-3.957Z"/>
+                                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 0 0 .95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.367 2.446a1 1 0 0 0-.364 1.118l1.286 3.957c.3.921-.755 1.688-1.54 1.118l-3.366-2.446a1 1 0 0 0-1.176 0l-3.366-2.446c-.784.57-1.838-.197-1.539-1.118l1.286-3.957a1 1 0 0 0-.364-1.118L2.05 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 0 0 .95-.69l1.286-3.957Z"/>
                                                     </svg>
                                                 ))}
                                             </div>

@@ -1,17 +1,27 @@
 import { Link, Head } from '@inertiajs/react';
 import SiteLayout from '@/Layouts/SiteLayout';
 import GameCard from '@/Components/GameCard';
+import Aurora from '@/Components/react-bits/Aurora';
+import GlitchText from '@/Components/react-bits/GlitchText';
 
 export default function Home({ featured, newReleases, deals, platforms }) {
     return (
         <SiteLayout>
             <Head title="Home" />
 
-            <section className="relative overflow-hidden">
-                <div className="absolute inset-0 bg-hero-glow opacity-80 pointer-events-none" />
-                <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1920&q=70')] bg-cover bg-center opacity-10 pointer-events-none" />
+            <section className="relative min-h-[28rem] overflow-hidden">
+                <div className="absolute inset-0 z-0">
+                    <Aurora
+                        colorStops={['#3b9bff', '#a78bfa', '#ec4899']}
+                        amplitude={1.15}
+                        blend={0.62}
+                        className="min-h-[28rem]"
+                    />
+                </div>
+                <div className="absolute inset-0 z-[1] bg-hero-glow opacity-50 pointer-events-none" />
+                <div className="absolute inset-0 z-[2] bg-gradient-to-b from-slate-950/80 via-slate-950/70 to-slate-950 pointer-events-none" />
 
-                <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+                <div className="relative z-[3] mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
                     <div className="max-w-3xl">
                         <div className="inline-flex items-center gap-2 rounded-full border border-brand-500/40 bg-brand-500/10 px-4 py-1.5 text-sm font-medium text-brand-300">
                             <span className="relative flex h-2 w-2">
@@ -21,9 +31,14 @@ export default function Home({ featured, newReleases, deals, platforms }) {
                             Consegna istantanea garantita in &lt; 5 secondi
                         </div>
 
-                        <h1 className="mt-6 text-5xl lg:text-7xl font-extrabold tracking-tight">
-                            Le tue chiavi <br />
-                            <span className="bg-gradient-to-r from-brand-400 via-accent-400 to-pink-400 bg-clip-text text-transparent">
+                        <h1 className="mt-6 text-5xl font-extrabold tracking-tight lg:text-7xl">
+                            <GlitchText
+                                speed={0.42}
+                                className="block text-left text-5xl leading-tight tracking-tight lg:text-7xl lg:leading-[1.05]"
+                            >
+                                Le tue chiavi
+                            </GlitchText>
+                            <span className="mt-2 block bg-gradient-to-r from-brand-400 via-accent-400 to-pink-400 bg-clip-text text-transparent">
                                 in pochi secondi
                             </span>
                         </h1>

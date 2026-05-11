@@ -28,6 +28,7 @@ export default function TicketsShow({ ticket }) {
                             )}
                         </h1>
                         <p className="text-slate-400">Aperto da {ticket.user?.name} il {new Date(ticket.created_at).toLocaleDateString('it-IT')}</p>
+                        <p className="text-white font-bold mt-2">Oggetto: {ticket.subject}</p>
                     </div>
                     <Link href={route('admin.tickets.index')} className="btn-ghost">
                         Torna ai Ticket
@@ -39,7 +40,7 @@ export default function TicketsShow({ ticket }) {
                         <div className="card">
                             <h2 className="text-xl font-bold mb-4">Dettagli Segnalazione</h2>
                             <div className="bg-slate-900 rounded p-4 border border-slate-800 text-slate-300 whitespace-pre-wrap">
-                                {ticket.description}
+                                {ticket.message}
                             </div>
                         </div>
 
@@ -87,7 +88,7 @@ export default function TicketsShow({ ticket }) {
                             <div className="card border-emerald-500/40 bg-emerald-500/5">
                                 <h2 className="text-xl font-bold mb-4 text-emerald-400">Dettagli Risoluzione</h2>
                                 <div className="text-slate-300 whitespace-pre-wrap">
-                                    {ticket.admin_notes || "Nessuna nota fornita."}
+                                    {ticket.admin_response || "Nessuna nota fornita."}
                                 </div>
                             </div>
                         )}

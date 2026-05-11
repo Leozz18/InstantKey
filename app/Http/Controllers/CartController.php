@@ -22,7 +22,7 @@ class CartController extends Controller
 
     public function add(Request $request, Product $product): RedirectResponse
     {
-        $request->validate(['quantity' => 'nullable|integer|min:1|max:10']);
+        $request->validate(['quantity' => 'nullable|integer|min:1|max:100']);
 
         if ($product->available_keys_count < ($request->input('quantity', 1))) {
             return back()->with('error', 'Stock chiavi insufficiente per questo prodotto.');
@@ -35,7 +35,7 @@ class CartController extends Controller
 
     public function update(Request $request, Product $product): RedirectResponse
     {
-        $data = $request->validate(['quantity' => 'required|integer|min:0|max:10']);
+        $data = $request->validate(['quantity' => 'required|integer|min:0|max:100']);
 
         $this->cart->update($product->id, (int) $data['quantity']);
 

@@ -57,7 +57,8 @@ class TicketController extends Controller
 
         $ticket->update([
             'status' => 'resolved',
-            'admin_notes' => $validated['resolution'],
+            'admin_response' => $validated['resolution'],
+            'resolved_at' => now(),
         ]);
 
         return redirect()->route('admin.tickets.index')->with('success', $message);

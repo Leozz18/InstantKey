@@ -96,6 +96,12 @@ class ProductController extends Controller
             $validated['slug'] = Str::slug($validated['title']) . '-' . uniqid();
         }
 
+        // Se il prezzo viene abbassato e non è stato impostato un prezzo originale,
+        // imposta automaticamente il vecchio prezzo come originale per mostrare lo sconto.
+        if ($validated['price'] < $product->price && empty($validated['original_price'])) {
+            $validated['original_price'] = $product->price;
+        }
+
         $product->update($validated);
 
         return redirect()->route('admin.products.index')->with('success', 'Prodotto aggiornato con successo.');

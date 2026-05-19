@@ -22,7 +22,7 @@ const GlitchText = ({ children, speed = 0.5, enableShadows = true, enableOnHover
     const combinedClasses = `${baseClasses} ${pseudoClasses} ${className}`;
 
     return (
-        <span style={inlineStyles} data-text={text} className={combinedClasses}>
+        <span key={text} style={inlineStyles} data-text={text} className={combinedClasses}>
             {text}
         </span>
     );

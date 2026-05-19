@@ -1,33 +1,36 @@
 import { Head, Link } from '@inertiajs/react';
 import SiteLayout from '@/Layouts/SiteLayout';
+import { useTranslation } from '@/translations';
 
 export default function AdminDashboard({ stats, latestOrders, lowStock }) {
+    const { t } = useTranslation();
+
     const cards = [
-        { label: 'Ricavi totali', value: `€ ${Number(stats.total_revenue).toFixed(2)}`, color: 'from-emerald-500 to-teal-500' },
-        { label: 'Ordini completati', value: stats.orders_count, color: 'from-brand-500 to-accent-500' },
-        { label: 'Utenti registrati', value: stats.users_count, color: 'from-pink-500 to-rose-500' },
-        { label: 'Prodotti attivi', value: stats.products_count, color: 'from-amber-500 to-orange-500' },
-        { label: 'Chiavi disponibili', value: stats.available_keys, color: 'from-cyan-500 to-blue-500' },
-        { label: 'Chiavi vendute', value: stats.sold_keys, color: 'from-indigo-500 to-purple-500' },
+        { label: t('total_revenue'), value: `€ ${Number(stats.total_revenue).toFixed(2)}`, color: 'from-emerald-500 to-teal-500' },
+        { label: t('completed_orders'), value: stats.orders_count, color: 'from-brand-500 to-accent-500' },
+        { label: t('registered_users'), value: stats.users_count, color: 'from-pink-500 to-rose-500' },
+        { label: t('active_products'), value: stats.products_count, color: 'from-amber-500 to-orange-500' },
+        { label: t('available_keys_stat'), value: stats.available_keys, color: 'from-cyan-500 to-blue-500' },
+        { label: t('sold_keys_stat'), value: stats.sold_keys, color: 'from-indigo-500 to-purple-500' },
     ];
 
     return (
         <SiteLayout>
-            <Head title="Admin Dashboard" />
+            <Head title={t('admin_dashboard_title')} />
 
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
                 <div className="flex items-center gap-3 mb-2">
-                    <h1 className="text-4xl font-extrabold">Admin Dashboard</h1>
-                    <span className="badge-info">Pannello di controllo</span>
+                    <h1 className="text-4xl font-extrabold">{t('admin_dashboard_title')}</h1>
+                    <span className="badge-info">{t('control_panel')}</span>
                 </div>
-                <p className="text-slate-400 mb-6">Vista d'insieme della piattaforma</p>
+                <p className="text-slate-400 mb-6">{t('platform_overview')}</p>
 
                 <div className="flex gap-3 mb-8">
                     <Link href={route('admin.products.index')} className="btn-primary">
-                        Gestione Prodotti & Chiavi
+                        {t('manage_products_keys')}
                     </Link>
                     <Link href={route('admin.tickets.index')} className="btn-ghost border border-slate-700 hover:border-slate-500">
-                        Gestione Ticket
+                        {t('manage_tickets')}
                     </Link>
                 </div>
 
@@ -51,16 +54,16 @@ export default function AdminDashboard({ stats, latestOrders, lowStock }) {
                             <svg className="h-6 w-6 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z"/>
                             </svg>
-                            <p><strong>{stats.open_tickets} ticket aperti</strong> richiedono la tua attenzione</p>
+                            <p><strong>{stats.open_tickets}</strong> {t('open_tickets_alert')}</p>
                         </div>
                     </div>
                 )}
 
                 <div className="grid lg:grid-cols-2 gap-6">
                     <div className="card">
-                        <h2 className="font-bold text-lg mb-4">Ultimi ordini</h2>
+                        <h2 className="font-bold text-lg mb-4">{t('latest_orders')}</h2>
                         {latestOrders.length === 0 ? (
-                            <p className="text-slate-400 text-sm">Nessun ordine ancora.</p>
+                            <p className="text-slate-400 text-sm">{t('no_orders_yet')}</p>
                         ) : (
                             <div className="space-y-3">
                                 {latestOrders.map((o) => (
@@ -71,7 +74,7 @@ export default function AdminDashboard({ stats, latestOrders, lowStock }) {
                                         </div>
                                         <div className="text-right shrink-0">
                                             <p className="font-bold">€ {Number(o.total_price).toFixed(2)}</p>
-                                            <p className="text-xs text-slate-500">{new Date(o.created_at).toLocaleDateString('it-IT')}</p>
+                                            <p className="text-xs text-slate-500">{new Date(o.created_at).toLocaleDateString()}</p>
                                         </div>
                                     </div>
                                 ))}
@@ -80,9 +83,9 @@ export default function AdminDashboard({ stats, latestOrders, lowStock }) {
                     </div>
 
                     <div className="card">
-                        <h2 className="font-bold text-lg mb-4">Stock chiavi basso</h2>
+                        <h2 className="font-bold text-lg mb-4">{t('low_keys_stock')}</h2>
                         {lowStock.length === 0 ? (
-                            <p className="text-slate-400 text-sm">Tutti i prodotti hanno scorte adeguate.</p>
+                            <p className="text-slate-400 text-sm">{t('all_stock_ok')}</p>
                         ) : (
                             <div className="space-y-3">
                                 {lowStock.map((p) => (
@@ -101,7 +104,7 @@ export default function AdminDashboard({ stats, latestOrders, lowStock }) {
                                             </div>
                                         </div>
                                         <span className={`badge ${p.available_keys === 0 ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40' : 'badge-warning'}`}>
-                                            {p.available_keys} chiavi
+                                            {p.available_keys} {t('keys_left')}
                                         </span>
                                     </Link>
                                 ))}

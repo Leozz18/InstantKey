@@ -1,19 +1,21 @@
 import { Head, Link } from '@inertiajs/react';
 import SiteLayout from '@/Layouts/SiteLayout';
+import { useTranslation } from '@/translations';
 
 export default function TicketsIndex({ tickets }) {
+    const { t } = useTranslation();
     return (
         <SiteLayout>
-            <Head title="Gestione Ticket" />
+            <Head title={t('ticket_support_title')} />
 
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
                 <div className="flex items-center justify-between gap-3 mb-8">
                     <div>
-                        <h1 className="text-4xl font-extrabold">Ticket di Supporto</h1>
-                        <p className="text-slate-400">Gestisci le richieste di assistenza e le chiavi non funzionanti</p>
+                        <h1 className="text-4xl font-extrabold">{t('ticket_support_title')}</h1>
+                        <p className="text-slate-400">{t('ticket_support_desc')}</p>
                     </div>
                     <Link href={route('admin.dashboard')} className="btn-ghost">
-                        Torna alla Dashboard
+                        {t('back_to_dashboard')}
                     </Link>
                 </div>
 
@@ -21,12 +23,12 @@ export default function TicketsIndex({ tickets }) {
                     <table className="w-full text-left text-sm whitespace-nowrap">
                         <thead className="border-b border-slate-800 text-slate-400 uppercase tracking-wider text-xs">
                             <tr>
-                                <th className="p-4 font-semibold">ID</th>
-                                <th className="p-4 font-semibold">Utente</th>
-                                <th className="p-4 font-semibold">Prodotto (Ordine)</th>
-                                <th className="p-4 font-semibold">Data</th>
-                                <th className="p-4 font-semibold">Stato</th>
-                                <th className="p-4 font-semibold">Azioni</th>
+                                <th className="p-4 font-semibold">{t('admin_tickets_id')}</th>
+                                <th className="p-4 font-semibold">{t('admin_tickets_user')}</th>
+                                <th className="p-4 font-semibold">{t('admin_tickets_product')}</th>
+                                <th className="p-4 font-semibold">{t('admin_tickets_date')}</th>
+                                <th className="p-4 font-semibold">{t('admin_tickets_status')}</th>
+                                <th className="p-4 font-semibold">{t('admin_tickets_actions')}</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-800">
@@ -41,18 +43,18 @@ export default function TicketsIndex({ tickets }) {
                                         <div className="font-semibold">{ticket.order_item?.product?.title || 'Prodotto eliminato'}</div>
                                     </td>
                                     <td className="p-4 text-slate-400">
-                                        {new Date(ticket.created_at).toLocaleDateString('it-IT', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                                        {new Date(ticket.created_at).toLocaleDateString(undefined, { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
                                     </td>
                                     <td className="p-4">
                                         {ticket.status === 'open' ? (
-                                            <span className="badge-warning">Aperto</span>
+                                            <span className="badge-warning">{t('ticket_status_open')}</span>
                                         ) : (
-                                            <span className="badge-success">Risolto</span>
+                                            <span className="badge-success">{t('ticket_status_resolved')}</span>
                                         )}
                                     </td>
                                     <td className="p-4">
                                         <Link href={route('admin.tickets.show', ticket.id)} className="btn-ghost text-xs py-1 px-2">
-                                            {ticket.status === 'open' ? 'Gestisci' : 'Visualizza'}
+                                            {ticket.status === 'open' ? t('admin_tickets_manage') : t('admin_tickets_view')}
                                         </Link>
                                     </td>
                                 </tr>
@@ -60,7 +62,7 @@ export default function TicketsIndex({ tickets }) {
                             {tickets.data.length === 0 && (
                                 <tr>
                                     <td colSpan="6" className="p-8 text-center text-slate-500">
-                                        Nessun ticket presente.
+                                        {t('admin_tickets_no_tickets')}
                                     </td>
                                 </tr>
                             )}

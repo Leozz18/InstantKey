@@ -2,9 +2,9 @@ import { useState, useEffect, useRef } from 'react';
 
 const Magnet = ({
     children,
-    padding = 100,
+    padding = 30,
     disabled = false,
-    magnetStrength = 2,
+    magnetStrength = 8,
     activeTransition = 'transform 0.3s ease-out',
     inactiveTransition = 'transform 0.5s ease-in-out',
     wrapperClassName = '',

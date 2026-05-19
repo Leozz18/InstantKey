@@ -100,21 +100,21 @@ export default function TicketsShow({ ticket }) {
                             <div className="space-y-3 text-sm">
                                 <div>
                                     <span className="block text-slate-500 text-xs uppercase tracking-wider">Prodotto</span>
-                                    <span className="font-semibold">{ticket.orderItem?.product?.title}</span>
+                                    <span className="font-semibold">{ticket.order_item?.product?.title}</span>
                                 </div>
                                 <div>
                                     <span className="block text-slate-500 text-xs uppercase tracking-wider">Piattaforma</span>
-                                    <span>{ticket.orderItem?.product?.platform?.name}</span>
+                                    <span>{ticket.order_item?.product?.platform?.name}</span>
                                 </div>
                                 <div>
                                     <span className="block text-slate-500 text-xs uppercase tracking-wider">Chiave Assegnata</span>
                                     <code className="bg-slate-900 px-2 py-1 rounded text-brand-400 select-all border border-slate-800 inline-block mt-1">
-                                        {ticket.orderItem?.key?.key_code || 'N/A'}
+                                        {ticket.order_item?.key?.key_code || 'N/A'}
                                     </code>
                                 </div>
                                 <div>
                                     <span className="block text-slate-500 text-xs uppercase tracking-wider">Stato Chiave</span>
-                                    {ticket.orderItem?.key?.status === 'invalid' ? (
+                                    {ticket.order_item?.key?.status === 'invalid' ? (
                                         <span className="text-rose-400">Invalida</span>
                                     ) : (
                                         <span className="text-emerald-400">Venduta</span>

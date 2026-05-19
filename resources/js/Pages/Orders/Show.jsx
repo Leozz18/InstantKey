@@ -109,8 +109,27 @@ export default function OrdersShow({ order }) {
                                 </button>
                             )}
                             {item.ticket && (
-                                <div className="mt-3 text-xs text-amber-300">
-                                    Ticket #{item.ticket.id} aperto · stato: {item.ticket.status}
+                                <div className="mt-3 p-3 rounded-lg bg-slate-900 border border-slate-800 text-xs">
+                                    <div className="flex items-center justify-between gap-2 mb-2">
+                                        <span className="font-semibold text-slate-300">Ticket #{item.ticket.id}</span>
+                                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                                            item.ticket.status === 'open' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/25' : 
+                                            item.ticket.status === 'resolved' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/25' : 
+                                            'bg-slate-800 text-slate-400'
+                                        }`}>
+                                            {item.ticket.status === 'open' ? 'Aperto' : item.ticket.status === 'resolved' ? 'Risolto' : item.ticket.status}
+                                        </span>
+                                    </div>
+                                    <p className="text-slate-400 font-bold mb-0.5">Il tuo messaggio:</p>
+                                    <p className="text-slate-300 mb-3 whitespace-pre-wrap">{item.ticket.message}</p>
+                                    {item.ticket.admin_response ? (
+                                        <div className="mt-2 p-2 rounded bg-brand-500/10 border border-brand-500/20">
+                                            <p className="text-[10px] uppercase tracking-wider text-brand-400 font-bold mb-1">Risposta dell'assistenza:</p>
+                                            <p className="text-slate-200 whitespace-pre-wrap">{item.ticket.admin_response}</p>
+                                        </div>
+                                    ) : (
+                                        <p className="text-[10px] text-slate-500 italic">In attesa di risposta dall'assistenza.</p>
+                                    )}
                                 </div>
                             )}
                         </div>

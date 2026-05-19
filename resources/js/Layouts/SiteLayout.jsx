@@ -94,6 +94,9 @@ export default function SiteLayout({ children }) {
                                 {auth?.user && (
                                     <Link href={route('orders.index')} className="btn-ghost">Ordini</Link>
                                 )}
+                                {auth?.user && (
+                                    <Link href={route('tickets.index')} className="btn-ghost">Supporto</Link>
+                                )}
                             </nav>
 
                             <div className="flex items-center gap-2">

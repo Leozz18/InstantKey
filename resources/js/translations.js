@@ -368,7 +368,6 @@ export const translations = {
 };
 
 let currentLang = typeof window !== 'undefined' ? (localStorage.getItem('lang') || 'it') : 'it';
-const listeners = new Set();
 
 export const getLanguage = () => currentLang;
 
@@ -376,16 +375,25 @@ export const setLanguage = (lang) => {
     currentLang = lang;
     if (typeof window !== 'undefined') {
         localStorage.setItem('lang', lang);
+        window.dispatchEvent(new Event('languagechange'));
     }
-    listeners.forEach(listener => listener(lang));
 };
 
 export const useTranslation = () => {
     const [lang, setLang] = useState(currentLang);
 
     useEffect(() => {
-        listeners.add(setLang);
-        return () => listeners.delete(setLang);
+        const handleLangChange = () => {
+            setLang(currentLang);
+        };
+        if (typeof window !== 'undefined') {
+            window.addEventListener('languagechange', handleLangChange);
+        }
+        return () => {
+            if (typeof window !== 'undefined') {
+                window.removeEventListener('languagechange', handleLangChange);
+            }
+        };
     }, []);
 
     const t = (key) => {

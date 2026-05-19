@@ -1,7 +1,9 @@
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
+import { useTranslation } from '@/translations';
 
 export default function Register() {
+    const { t } = useTranslation();
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',
         email: '',
@@ -18,14 +20,14 @@ export default function Register() {
 
     return (
         <GuestLayout>
-            <Head title="Registrati" />
+            <Head title={t('register')} />
 
-            <h1 className="text-2xl font-bold text-white text-center">Crea il tuo account</h1>
-            <p className="text-center text-slate-400 text-sm mt-1">Inizia a giocare in pochi secondi</p>
+            <h1 className="text-2xl font-bold text-white text-center">{t('create_account')}</h1>
+            <p className="text-center text-slate-400 text-sm mt-1">{t('register_desc')}</p>
 
             <form onSubmit={submit} className="mt-6 space-y-4">
                 <div>
-                    <label className="block text-sm font-semibold text-slate-300 mb-1.5">Nome</label>
+                    <label className="block text-sm font-semibold text-slate-300 mb-1.5">{t('name_label')}</label>
                     <input
                         value={data.name}
                         onChange={(e) => setData('name', e.target.value)}
@@ -38,7 +40,7 @@ export default function Register() {
                 </div>
 
                 <div>
-                    <label className="block text-sm font-semibold text-slate-300 mb-1.5">Email</label>
+                    <label className="block text-sm font-semibold text-slate-300 mb-1.5">{t('email')}</label>
                     <input
                         type="email"
                         value={data.email}
@@ -51,7 +53,7 @@ export default function Register() {
                 </div>
 
                 <div>
-                    <label className="block text-sm font-semibold text-slate-300 mb-1.5">Password</label>
+                    <label className="block text-sm font-semibold text-slate-300 mb-1.5">{t('password')}</label>
                     <input
                         type="password"
                         value={data.password}
@@ -64,7 +66,7 @@ export default function Register() {
                 </div>
 
                 <div>
-                    <label className="block text-sm font-semibold text-slate-300 mb-1.5">Conferma password</label>
+                    <label className="block text-sm font-semibold text-slate-300 mb-1.5">{t('confirm_password')}</label>
                     <input
                         type="password"
                         value={data.password_confirmation}
@@ -77,13 +79,13 @@ export default function Register() {
                 </div>
 
                 <button type="submit" disabled={processing} className="btn-primary w-full">
-                    {processing ? 'Creazione...' : 'Crea account'}
+                    {processing ? t('creating') : t('create_account')}
                 </button>
 
                 <p className="text-center text-sm text-slate-400">
-                    Hai già un account?{' '}
+                    {t('have_account')}{' '}
                     <Link href={route('login')} className="text-brand-400 hover:text-brand-300 font-semibold">
-                        Accedi
+                        {t('login')}
                     </Link>
                 </p>
             </form>

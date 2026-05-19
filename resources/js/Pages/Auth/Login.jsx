@@ -1,7 +1,9 @@
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
+import { useTranslation } from '@/translations';
 
 export default function Login({ status, canResetPassword }) {
+    const { t } = useTranslation();
     const { data, setData, post, processing, errors, reset } = useForm({
         email: '',
         password: '',
@@ -15,10 +17,10 @@ export default function Login({ status, canResetPassword }) {
 
     return (
         <GuestLayout>
-            <Head title="Accedi" />
+            <Head title={t('login')} />
 
-            <h1 className="text-2xl font-bold text-white text-center">Bentornato</h1>
-            <p className="text-center text-slate-400 text-sm mt-1">Accedi al tuo account INSTANT KEY</p>
+            <h1 className="text-2xl font-bold text-white text-center">{t('welcome_back')}</h1>
+            <p className="text-center text-slate-400 text-sm mt-1">{t('login_desc')}</p>
 
             {status && (
                 <div className="mt-4 p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/40 text-sm text-emerald-300">
@@ -28,7 +30,7 @@ export default function Login({ status, canResetPassword }) {
 
             <form onSubmit={submit} className="mt-6 space-y-4">
                 <div>
-                    <label className="block text-sm font-semibold text-slate-300 mb-1.5">Email</label>
+                    <label className="block text-sm font-semibold text-slate-300 mb-1.5">{t('email')}</label>
                     <input
                         type="email"
                         value={data.email}
@@ -42,7 +44,7 @@ export default function Login({ status, canResetPassword }) {
                 </div>
 
                 <div>
-                    <label className="block text-sm font-semibold text-slate-300 mb-1.5">Password</label>
+                    <label className="block text-sm font-semibold text-slate-300 mb-1.5">{t('password')}</label>
                     <input
                         type="password"
                         value={data.password}
@@ -62,28 +64,28 @@ export default function Login({ status, canResetPassword }) {
                             onChange={(e) => setData('remember', e.target.checked)}
                             className="rounded border-slate-700 bg-slate-800 text-brand-500 focus:ring-brand-500/40"
                         />
-                        <span className="text-sm text-slate-300">Ricordami</span>
+                        <span className="text-sm text-slate-300">{t('remember_me')}</span>
                     </label>
                     {canResetPassword && (
                         <Link href={route('password.request')} className="text-sm text-brand-400 hover:text-brand-300">
-                            Password dimenticata?
+                            {t('forgot_password')}
                         </Link>
                     )}
                 </div>
 
                 <button type="submit" disabled={processing} className="btn-primary w-full">
-                    {processing ? 'Accesso...' : 'Accedi'}
+                    {processing ? t('logging_in') : t('login')}
                 </button>
 
                 <p className="text-center text-sm text-slate-400">
-                    Non hai un account?{' '}
+                    {t('no_account')}{' '}
                     <Link href={route('register')} className="text-brand-400 hover:text-brand-300 font-semibold">
-                        Registrati
+                        {t('register')}
                     </Link>
                 </p>
 
                 <div className="mt-4 p-3 rounded-lg bg-slate-900 border border-slate-800 text-xs text-slate-500">
-                    <strong className="text-slate-400">Demo accounts:</strong><br />
+                    <strong className="text-slate-400">{t('demo_accounts')}</strong><br />
                     Admin: admin@instantkey.test / password<br />
                     User: demo@instantkey.test / password
                 </div>

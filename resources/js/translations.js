@@ -167,6 +167,21 @@ export const translations = {
         admin_ticket_key_sold: "Venduta",
         admin_ticket_user_name: "Nome",
         admin_ticket_user_email: "Email",
+
+        // Auth Pages
+        welcome_back: "Bentornato",
+        login_desc: "Accedi al tuo account INSTANT KEY",
+        remember_me: "Ricordami",
+        forgot_password: "Password dimenticata?",
+        logging_in: "Accesso...",
+        no_account: "Non hai un account?",
+        demo_accounts: "Account di prova:",
+        create_account: "Crea il tuo account",
+        register_desc: "Inizia a giocare in pochi secondi",
+        name_label: "Nome",
+        confirm_password: "Conferma password",
+        creating: "Creazione...",
+        have_account: "Hai già un account?",
     },
     en: {
         // SiteLayout / Navbar
@@ -334,6 +349,21 @@ export const translations = {
         admin_ticket_key_sold: "Sold",
         admin_ticket_user_name: "Name",
         admin_ticket_user_email: "Email",
+
+        // Auth Pages
+        welcome_back: "Welcome Back",
+        login_desc: "Login to your INSTANT KEY account",
+        remember_me: "Remember me",
+        forgot_password: "Forgot password?",
+        logging_in: "Logging in...",
+        no_account: "Don't have an account?",
+        demo_accounts: "Demo accounts:",
+        create_account: "Create your account",
+        register_desc: "Start gaming in seconds",
+        name_label: "Name",
+        confirm_password: "Confirm password",
+        creating: "Creating...",
+        have_account: "Already have an account?",
     }
 };
 
